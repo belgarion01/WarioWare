@@ -73,7 +73,7 @@ public class TilemapGenerator : MonoBehaviour
                 if (i == commands.Length - 1 && j == 1)
                 {
                     success = true;
-                    Debug.Log("Success!");
+                    //Debug.Log("Success!");
                 }
 
                 //Tente une première direction
@@ -90,7 +90,7 @@ public class TilemapGenerator : MonoBehaviour
                     else
                     {
                         GeneratePath();
-                        Debug.Log("BLOCKED");
+                        //Debug.Log("BLOCKED");
                         return;
                     }                  
                 }
@@ -152,7 +152,13 @@ public class TilemapGenerator : MonoBehaviour
                 if (possiblePaths[j].stopped) continue;
                 //Check si la prochain position est un defaultType si oui il stop
                 Vector3Int nextPosition = possiblePaths[j].position + ToVector3(possiblePaths[j].direction);
-                //Check si y'a deja une tile a côté
+                
+                if (tilemap.GetTile(nextPosition) == carrefourType)
+                {
+                    possiblePaths[j].stopped = true;
+                    continue;
+                }
+                //Check si y'a deja une tile a côté de la prochaine position verticalement
                 if (possiblePaths[j].direction == Direction.Haut || possiblePaths[j].direction == Direction.Bas)
                 {
                     TileBase typeRight = tilemap.GetTile(nextPosition + ToVector3(Direction.Droite));
@@ -160,7 +166,7 @@ public class TilemapGenerator : MonoBehaviour
 
                     if (typeRight == stageType || typeLeft == stageType)
                     {
-                        //Check y'en avait déjà un
+                        //Check si y'a deja une tile a côté de la tile actuelle
                         typeRight = tilemap.GetTile(possiblePaths[j].position + ToVector3(Direction.Droite));
                         typeLeft = tilemap.GetTile(possiblePaths[j].position + ToVector3(Direction.Gauche));
 
@@ -171,7 +177,18 @@ public class TilemapGenerator : MonoBehaviour
                         }
                         else
                         {
-                            possiblePaths[j].stopped = true;
+                            typeRight = tilemap.GetTile(possiblePaths[j].position + ToVector3(possiblePaths[j].direction) * 2 + ToVector3(Direction.Droite));
+                            typeLeft = tilemap.GetTile(possiblePaths[j].position + ToVector3(possiblePaths[j].direction) * 2 + ToVector3(Direction.Gauche));
+                            //Dernier changer ça
+                            if (/*isEmptyTile(possiblePaths[j].position + ToVector3(possiblePaths[j].direction) * 2)*/(typeRight == null || typeRight == blockType) || (typeLeft == null || typeLeft == blockType))
+                            {
+                                possiblePaths[j].stopped = true;
+                            }
+                            else
+                            {
+                                possiblePaths[j].stopped = true;
+                                continue;
+                            }                         
                         }
                     }
                 }
@@ -191,9 +208,21 @@ public class TilemapGenerator : MonoBehaviour
                             possiblePaths[j].stopped = true;
                             continue;
                         }
+
                         else
                         {
-                            possiblePaths[j].stopped = true;
+                            typeUp = tilemap.GetTile(possiblePaths[j].position + ToVector3(possiblePaths[j].direction) * 2 + ToVector3(Direction.Haut));
+                            typeDown = tilemap.GetTile(possiblePaths[j].position + ToVector3(possiblePaths[j].direction) * 2 + ToVector3(Direction.Bas));
+
+                            if (/*isEmptyTile(possiblePaths[j].position + ToVector3(possiblePaths[j].direction) * 2)*/(typeUp == null || typeUp == blockType) || (typeDown == null || typeDown == blockType))
+                            {
+                                possiblePaths[j].stopped = true;
+                            }
+                            else
+                            {
+                                possiblePaths[j].stopped = true;
+                                continue;
+                            }
                         }
                     }
                 }
@@ -238,9 +267,51 @@ public class TilemapGenerator : MonoBehaviour
         }
     }
 
+    [Button]
     public void ConvertTiles()
     {
+        tilemap.SwapTile(carrefourType, defaultType);
+    }
 
+    [Button]
+    public void FillWithEmpty()
+    {
+        foreach (Vector3Int pos in tilemap.cellBounds.allPositionsWithin)
+        {
+            if (isEmptyTile(pos))
+            {
+                tilemap.SetTile(pos, blockTile);
+            }
+        }
+    }
+
+    public void CheckForSquare()
+    {
+        bool square = false;
+        foreach (Vector3Int pos in tilemap.cellBounds.allPositionsWithin)
+        {
+            bool positionOk = false;
+            List<TileBase> tiles = new List<TileBase>();
+            for (int i = 0; i < 2; i++)
+            {
+                for (int j = 0; j < 2; j++)
+                {
+                    tiles.Add(tilemap.GetTile(new Vector3Int(pos.x + i, pos.y + j, 0)));
+                }
+            }
+            foreach (TileBase tile in tiles)
+            {
+                if(tile != defaultType && tile != stageType && tile != carrefourType)
+                {
+                    positionOk = true;
+                }
+            }
+            if (!positionOk)
+            {
+                Debug.Log("SQUARED");
+                Launch();
+            }
+        }
     }
 
     bool isDefaultTile(Vector3Int position)
@@ -427,6 +498,8 @@ public class TilemapGenerator : MonoBehaviour
         }
     }
 
+
+
     private void OnDrawGizmos()
     {
         Gizmos.DrawSphere(headPosition+new Vector3(0.5f, 0.5f), 0.3f);
@@ -444,6 +517,9 @@ public class TilemapGenerator : MonoBehaviour
     {
         GeneratePath();
         GenerateCarrefour();
+        FillWithEmpty();
+        ConvertTiles();
+        CheckForSquare();
     }
 
     [Button]
