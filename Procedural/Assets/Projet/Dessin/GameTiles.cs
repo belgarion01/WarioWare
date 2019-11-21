@@ -10,7 +10,7 @@ public class GameTiles : MonoBehaviour
 
     public Dictionary<Vector3, WorldTile> tiles;
 
-    private void Awake()
+    private void Start()
     {
         if (instance == null)
         {

@@ -37,6 +37,17 @@ public class TilemapGenerator : MonoBehaviour
 
     public List<Vector3Int> carrefourPositions = new List<Vector3Int>();
 
+    public TileBase BonChemin;
+    public TileBase MauvaisChemin;
+    public TileBase Batiment;
+
+    public int stepsToRemove;
+
+    private void Awake()
+    {
+        Launch();
+    }
+
     public void GeneratePath()
     {
         ClearMap();
@@ -48,6 +59,7 @@ public class TilemapGenerator : MonoBehaviour
 
         headDirection = Direction.Droite;
 
+        stepsToRemove = 0;
         success = false;
 
         //Set des Commandes aléatoire
@@ -56,9 +68,17 @@ public class TilemapGenerator : MonoBehaviour
         //Début du long chemin (plusieurs courts chemins)
         for (int i = 0; i < commands.Length; i++)
         {
+            bool lastCommand = false;
             //Nombre aléatoire de pas pour le court chemin
             int randomSteps = Random.Range(2, 4);
             if (i == 0) randomSteps = 2;
+            else if (i == commands.Length - 1) lastCommand = true;
+
+            if (lastCommand)
+            {
+                //randomSteps = 1;
+                stepsToRemove++;
+            }
 
             //Tourne en fonction de la Commande
             headDirection = RotateDirection(commands[i], headDirection);
@@ -95,7 +115,6 @@ public class TilemapGenerator : MonoBehaviour
                     }                  
                 }
 
-                //Pose la Tile chemin à la prochaine position
                 tilemap.SetTile(nextPosition, defaultTile);
 
                 //Pose les blockTiles
@@ -120,8 +139,15 @@ public class TilemapGenerator : MonoBehaviour
             }
 
             //Place une balise au carrefour
-            tilemap.SetTile(headPosition, roundTile);
-            carrefourPositions.Add(headPosition);
+            //if (!lastCommand)
+            //{
+                tilemap.SetTile(headPosition, roundTile);
+                carrefourPositions.Add(headPosition);
+            //}
+            //else
+            //{
+                tilemap.SetTile(headPosition, defaultTile);
+            //}
 
             //WIP STOCKER LA POSITION DES CARREFOURS POUR GENERATE OTHER ROUTES LA
             //COMMENT AJOUTER D'AUTRES CARREFOURS ?
@@ -271,6 +297,11 @@ public class TilemapGenerator : MonoBehaviour
     public void ConvertTiles()
     {
         tilemap.SwapTile(carrefourType, defaultType);
+        ///
+        tilemap.SwapTile(defaultType, BonChemin);
+        tilemap.SwapTile(stageType, MauvaisChemin);
+        tilemap.SwapTile(blockType, Batiment);
+
     }
 
     [Button]
@@ -301,7 +332,8 @@ public class TilemapGenerator : MonoBehaviour
             }
             foreach (TileBase tile in tiles)
             {
-                if(tile != defaultType && tile != stageType && tile != carrefourType)
+                //Si la case n'est pas un éléments ou l'on peut dessiner
+                if(/*tile != defaultType && tile != stageType && tile != carrefourType*/ tile != BonChemin && tile != MauvaisChemin && tile)
                 {
                     positionOk = true;
                 }

@@ -9,6 +9,12 @@ public class TileTypes : ScriptableObject
     public TileType defaultTile;
 
     public TileType blockTile;
+
+    public TileType bonChemin;
+
+    public TileType mauvaisChemin;
+
+    public TileType batiment;
 }
 
 [System.Serializable]

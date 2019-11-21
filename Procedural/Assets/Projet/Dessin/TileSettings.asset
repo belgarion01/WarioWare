@@ -18,3 +18,12 @@ MonoBehaviour:
   blockTile:
     tile: {fileID: 11400000, guid: c05a7e91a0351b042a4e037d2cec999f, type: 2}
     type: {fileID: 11400000, guid: c05a7e91a0351b042a4e037d2cec999f, type: 2}
+  bonChemin:
+    tile: {fileID: 11400000, guid: 79030408ad3f2d040a5155a34bb83372, type: 2}
+    type: {fileID: 11400000, guid: 79030408ad3f2d040a5155a34bb83372, type: 2}
+  mauvaisChemin:
+    tile: {fileID: 11400000, guid: 17b66f7e67a292f49a87abce2a1fef73, type: 2}
+    type: {fileID: 11400000, guid: 17b66f7e67a292f49a87abce2a1fef73, type: 2}
+  batiment:
+    tile: {fileID: 11400000, guid: 6b49682efe924c84fbaca7b1613dc616, type: 2}
+    type: {fileID: 11400000, guid: 6b49682efe924c84fbaca7b1613dc616, type: 2}
