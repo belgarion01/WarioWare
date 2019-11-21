@@ -3,7 +3,12 @@ guid: 9f9c8b8fc591d094986d8b0fc7d0b515
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - defaultTile: {fileID: 11400000, guid: c7b327ee5373f6241bb51b59fbe53708, type: 2}
+  - blockTile: {fileID: 11400000, guid: c05a7e91a0351b042a4e037d2cec999f, type: 2}
+  - bonChemin: {fileID: 11400000, guid: 79030408ad3f2d040a5155a34bb83372, type: 2}
+  - mauvaisChemin: {fileID: 11400000, guid: 17b66f7e67a292f49a87abce2a1fef73, type: 2}
+  - batiment: {fileID: 11400000, guid: 6b49682efe924c84fbaca7b1613dc616, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

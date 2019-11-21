@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f9c8b8fc591d094986d8b0fc7d0b515, type: 3}
+  m_Name: TileTypes
+  m_EditorClassIdentifier: 
+  MainPath: {fileID: 11400000, guid: c7b327ee5373f6241bb51b59fbe53708, type: 2}
+  SecondPath: {fileID: 11400000, guid: 7a73f7ea992fdf94193f86610eb1fb87, type: 2}
+  Crossroad: {fileID: 11400000, guid: f8dfec145bcac2940ba9d5de6b27c9e3, type: 2}
+  Cross: {fileID: 11400000, guid: c05a7e91a0351b042a4e037d2cec999f, type: 2}
+  Debug: {fileID: 11400000, guid: 629812e254b3aa44c9a2bdfced285593, type: 2}
+  CorrectPath: {fileID: 11400000, guid: 79030408ad3f2d040a5155a34bb83372, type: 2}
+  WrongPath: {fileID: 11400000, guid: 17b66f7e67a292f49a87abce2a1fef73, type: 2}
+  Building: {fileID: 11400000, guid: 6b49682efe924c84fbaca7b1613dc616, type: 2}

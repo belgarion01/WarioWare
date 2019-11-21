@@ -8,7 +8,7 @@ public class GameTiles : MonoBehaviour
     public static GameTiles instance;
     public Tilemap Tilemap;
 
-    public Dictionary<Vector3, WorldTile> tiles;
+    public Dictionary<Vector3, TileData> tiles;
 
     private void Start()
     {
@@ -26,13 +26,13 @@ public class GameTiles : MonoBehaviour
     // Use this for initialization
     private void GetWorldTiles()
     {
-        tiles = new Dictionary<Vector3, WorldTile>();
+        tiles = new Dictionary<Vector3, TileData>();
         foreach (Vector3Int pos in Tilemap.cellBounds.allPositionsWithin)
         {
             var localPlace = new Vector3Int(pos.x, pos.y, pos.z);
 
             if (!Tilemap.HasTile(localPlace)) continue;
-            var tile = new WorldTile
+            var tile = new TileData
             {
                 position = localPlace,
                 worldPosition = Tilemap.CellToWorld(localPlace),

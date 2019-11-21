@@ -6,20 +6,19 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu]
 public class TileTypes : ScriptableObject
 {
-    public TileType defaultTile;
+    public TileBase MainPath;
 
-    public TileType blockTile;
+    public TileBase SecondPath;
 
-    public TileType bonChemin;
+    public TileBase Crossroad;
 
-    public TileType mauvaisChemin;
+    public TileBase Cross;
 
-    public TileType batiment;
-}
+    public TileBase Debug;
 
-[System.Serializable]
-public class TileType
-{
-    public Tile tile;
-    public TileBase type;
+    public TileBase CorrectPath;
+
+    public TileBase WrongPath;
+
+    public TileBase Building;
 }
