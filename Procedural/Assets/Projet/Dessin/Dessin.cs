@@ -7,14 +7,14 @@ using UnityEngine.Tilemaps;
 public class Dessin : MonoBehaviour
 {
     //References
-    public TilemapGenerator generator;
     public Tilemap tilemap;
     private TileData _tile;
     public TileTypes tileTypes;
+    public MementoSavedData savedData;
 
 
     //Vérifie les tiles coloriées (ça peut être un autre script ça en vrai mais ça prend moins de place)
-    int numberOfMainPathTiles;
+    int numberOfCorrectPathTiles { get { return savedData.numberOfCorrectPaths; } }
     int numberOfActivatedMainPathTiles;
 
     public GameObject defeatPannel;
@@ -26,20 +26,14 @@ public class Dessin : MonoBehaviour
     List<Vector3> currentLinePositions = new List<Vector3>();
     bool canDraw = true;
 
+    //Tiles
+    Dictionary<Vector3, TileData> tiles;
 
     private void Start()
     {
-        numberOfMainPathTiles = 0;
-        numberOfActivatedMainPathTiles = 0;
-        foreach (Vector3Int pos in tilemap.cellBounds.allPositionsWithin)
-        {
-            var localPlace = new Vector3Int(pos.x, pos.y, pos.z);
-
-            if (!tilemap.HasTile(localPlace)) continue;
-            if (tilemap.GetTile(localPlace) == tileTypes.CorrectPath) numberOfMainPathTiles++;
-        }
-        numberOfMainPathTiles -= generator.stepsToRemove+1;
+        StartCoroutine(GetTiles());
     }
+
 
     private void Update()
     {
@@ -57,41 +51,37 @@ public class Dessin : MonoBehaviour
             }
 
             Vector3 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            var worldPoint = new Vector3Int(Mathf.FloorToInt(point.x), Mathf.FloorToInt(point.y), 0);
-
-            var tiles = GameTiles.instance.tiles; // This is our Dictionary of tiles
+            var worldPoint = new Vector3Int(Mathf.FloorToInt(point.x), Mathf.FloorToInt(point.y), 0);        
 
             if (tiles.TryGetValue(worldPoint, out _tile))
             {
                 if (_tile.type == tileTypes.CorrectPath&&!_tile.activated)
                 {
-                    //print("Tile " + _tile.name);
                     _tile.tilemap.SetTileFlags(_tile.position, TileFlags.None);
                     //_tile.tilemap.SetColor(_tile.position, Color.green);
                     _tile.activated = true;
                     numberOfActivatedMainPathTiles++;
-                    if (numberOfActivatedMainPathTiles == numberOfMainPathTiles) Victory();
+                    if (numberOfActivatedMainPathTiles == numberOfCorrectPathTiles) Victory();
                 }
 
                 else if(_tile.type == tileTypes.Building || _tile.type == tileTypes.WrongPath)
                 {
-                    //canDraw = false;
-                    //Instantiate(GameObject.CreatePrimitive(PrimitiveType.Sphere), _tile.position + (new Vector3(0.5f, 0.5f, 0f)), Quaternion.identity);
                     Defeat();
-                    Debug.Log("GAME OVER : " + _tile.type);
                 }
             }
         }
 
         if (Input.GetMouseButtonUp(0))
         {
-            if (numberOfActivatedMainPathTiles != numberOfMainPathTiles)
+            if (numberOfActivatedMainPathTiles != numberOfCorrectPathTiles)
             {
                 Defeat();
             }
-            Debug.Log(numberOfActivatedMainPathTiles + " / " + numberOfMainPathTiles);
+            Debug.Log(numberOfActivatedMainPathTiles + " / " + numberOfCorrectPathTiles);
         }
     }
+
+    #region Dessin
 
     void CreateLine()
     {
@@ -111,6 +101,8 @@ public class Dessin : MonoBehaviour
         currentLineRenderer.SetPosition(currentLineRenderer.positionCount - 1, position);
     }
 
+    #endregion
+
     void Defeat()
     {
         canDraw = false;
@@ -121,6 +113,12 @@ public class Dessin : MonoBehaviour
     {
         canDraw = false;
         victoryPannel.SetActive(true);
+    }
+
+    IEnumerator GetTiles()
+    {
+        while(GameTiles.instance == null) yield return new WaitForEndOfFrame();
+        tiles = GameTiles.instance.tiles;
     }
 }
 

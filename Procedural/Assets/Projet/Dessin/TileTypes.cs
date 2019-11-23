@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "Micro-games/Memento/TileTypes")]
 public class TileTypes : ScriptableObject
 {
     public TileBase MainPath;

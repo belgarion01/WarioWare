@@ -1,20 +1,22 @@
 ﻿using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 
 public class TilemapGenerator : MonoBehaviour
 {
+    //Tilemap & Tiles
+    [SerializeField] private Tilemap tilemap;
+    [SerializeField] private TileTypes tileTypes;
+
     //Commands
     public enum Command { Devant, Droite, Gauche };
     [SerializeField] private int numberOfCommands = 4;
     [SerializeField] bool randomCommands = true;
     public Command[] commands;
-
-    //Tilemap & Tiles
-    [SerializeField] private Tilemap tilemap;
-    [SerializeField] private TileTypes tileTypes;
 
     //Directions
     public enum Direction { Haut, Droite, Bas, Gauche};
@@ -32,8 +34,10 @@ public class TilemapGenerator : MonoBehaviour
     //Longueur maximum d'un chemin secondaire
     const int secondPathMaxLength = 8;
 
-    //Montre la position de la Head
-    public bool showHeadPosition;
+    //
+    public MementoSavedData savedData;
+
+    public UnityEvent OnMapGenerated;
 
     private void Awake()
     {
@@ -56,8 +60,11 @@ public class TilemapGenerator : MonoBehaviour
         //Convertie les tiles pour le gameplay
         ConvertTiles();
 
-        //Vérifie une dernière fois qu'il n'y a pas d'erreurs (de carrés)
+        //Vérifie une dernière fois qu'il n'y a pas d'erreurs (des carrés)
         CheckForSquare();
+
+        //Si tout ça est bon alors on sauvegarde tout ça
+        StartCoroutine(SaveData());
     }
 
     public void GeneratePath()
@@ -82,7 +89,7 @@ public class TilemapGenerator : MonoBehaviour
             bool lastCommand = i == commands.Length - 1 ? true : false;
 
             //If last command, count the number of steps
-            if (lastCommand) stepsToRemove++;
+            //if (lastCommand) stepsToRemove++;
 
             //Nombre aléatoire de pas pour le court chemin
             int randomSteps;
@@ -95,6 +102,7 @@ public class TilemapGenerator : MonoBehaviour
             //Commence les petits pas (plusieurs points) (intermédiaire entre le début et la fin du court chemin)
             for (int j = 0; j < randomSteps; j++)
             {
+                if (lastCommand) stepsToRemove++;
                 //Détecte si le jeu peut être fini
                 if (i == commands.Length - 1 && j == 1)
                 {
@@ -364,6 +372,7 @@ public class TilemapGenerator : MonoBehaviour
             if (!positionOk)
             {
                 GenerateMap();
+                return;
             }
         }
     }
@@ -437,7 +446,7 @@ public class TilemapGenerator : MonoBehaviour
             headDirection = RotateDirection(successfulCommands[rand], testDirection);
 
             //Change la commande modifiée dans la liste pré-générée.
-            this.commands[commandToChangeIndex] = successfulCommands[0];            
+            this.commands[commandToChangeIndex] = successfulCommands[rand];            
             return true;
         }
         else
@@ -593,14 +602,31 @@ public class TilemapGenerator : MonoBehaviour
         }
     }
 
-
-    //Permet de visualiser la Head
-    private void OnDrawGizmos()
+    IEnumerator SaveData()
     {
-        if (showHeadPosition)
+        while (GameTiles.instance == null) yield return new WaitForEndOfFrame();
+        var _tiles = GameTiles.instance.tiles;
+        List<TileData> tilesData = new List<TileData>();
+        TileData _data;
+        savedData.numberOfCorrectPaths = 0;
+
+        foreach (Vector3Int pos in tilemap.cellBounds.allPositionsWithin)
         {
-            Gizmos.DrawSphere(headPosition + new Vector3(0.5f, 0.5f), 0.3f);
+            //Sauvegarde l'emplacement des tiles
+            if (_tiles.TryGetValue(pos, out _data))
+            {
+                tilesData.Add(_data);
+                if (_data.type == tileTypes.CorrectPath)
+                {
+                    savedData.numberOfCorrectPaths++;
+                }
+            }
         }
+
+        savedData.tilesData = tilesData;
+        savedData.numberOfCorrectPaths -= stepsToRemove - 1;
+        savedData.commands = commands;
+        yield return null;
     }
 
     //Reset la tilemap
