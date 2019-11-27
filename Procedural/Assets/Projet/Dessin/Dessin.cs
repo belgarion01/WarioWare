@@ -29,6 +29,9 @@ public class Dessin : MonoBehaviour
     //Tiles
     Dictionary<Vector3, TileData> tiles;
 
+    //Visual
+    public Transform Pen;
+
     private void Start()
     {
         StartCoroutine(GetTiles());
@@ -37,6 +40,9 @@ public class Dessin : MonoBehaviour
 
     private void Update()
     {
+        Pen.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Pen.position = new Vector3(Pen.position.x, Pen.position.y, -1);
+
         if (Input.GetMouseButtonDown(0))
         {
             CreateLine();

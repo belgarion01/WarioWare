@@ -1,0 +1,114 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a3573387a8895b4db11695038d47d6e, type: 3}
+  m_Name: CommandLibrary
+  m_EditorClassIdentifier: 
+  LeftCommandSprite: {fileID: 21300000, guid: 0c528d989195e1b4798a8b90c4668b8e, type: 3}
+  ForwardCommandSprite: {fileID: 21300000, guid: 8d1ed90f27d66c547a657aff28b3fad6,
+    type: 3}
+  RightCommandSprite: {fileID: 21300000, guid: 643267340cdfa914689f95c7f0634344, type: 3}
+  roadsName:
+  - "All\xE9e du Philosophe"
+  - "All\xE9e Verte"
+  - Avenue de Corbera
+  - Avenue Percier
+  - Avenue Victor-Hugo
+  - Boulevard Macdonald
+  - Boulevard Soult
+  - "Cit\xE9 Aubry"
+  - Cour Jasmin
+  - "Esplanade L\xE9o Hamon"
+  - Galerie de la Madeleine
+  - Galerie du Caire
+  - Hameau d'Alleray
+  - La Porte Jaune
+  - Passage Binder
+  - Passage Brady
+  - Passage de Verdun
+  - 'Passage des Princes '
+  - Passage Dieu
+  - Passage Dubois
+  - Passage Saint-Ange
+  - Passage Wattieaux
+  - Place Coluche
+  - Place d'Italie
+  - "Place de l'\xC9cole"
+  - Place de Wagram
+  - "Place du Ch\xE2telet"
+  - "Place Falgui\xE8re"
+  - "Place H\xE9bert"
+  - Place Souham
+  - Place Violet
+  - Pont des Arts
+  - Port de Bercy
+  - Porte de la Seine
+  - Porte Lescot
+  - Promenade Jules Isaac
+  - Quai d'Anjou
+  - Quai de l'Allier
+  - Quai Voltaire
+  - Route de la Ferme
+  - Route du Pesage
+  - Rue Agar
+  - Rue Archereau
+  - Rue Augereau
+  - Rue Bellini
+  - Rue Blomet
+  - Rue Buffon
+  - Rue Caron
+  - Rue Charles-Weiss
+  - Rue Clairaut
+  - Rue Crillon
+  - Rue d'Argenson
+  - Rue de Babylone
+  - Rue de Bucarest
+  - Rue de Gergovie
+  - Rue de l'Empereur Julien
+  - Rue de l'Armorique
+  - Rue de la Goutte-d'Or
+  - "Rue de Li\xE8ge"
+  - Rue de Lille
+  - Rue de Pommard
+  - Rue de Nantes
+  - Rue de Saintonge
+  - Rue Debrousse
+  - Rue des Beaux-Arts
+  - "Rue des M\xFBriers"
+  - Rue des Ternes
+  - Rue du Chaffault
+  - Rue du Congo
+  - "Rue du G\xE9n\xE9ral-Camou"
+  - Rue du Ruisseau
+  - Rue du Soudan
+  - "Rue \xC9mile-Borel"
+  - "Rue F\xE9lix-Faure"
+  - Rue Francis-Carco
+  - "Rue Gu\xE9rin-Boisseau"
+  - "Rue Jacques-Destr\xE9e"
+  - Rue Joseph-Dijon
+  - Rue Le Brun
+  - Rue Louis-Murat
+  - Rue Michel-Ange
+  - Rue Nobel
+  - Rue Petel
+  - Rue Pierre-Villey
+  - Rue Saint-Blaise
+  - Rue Saint-Hubert
+  - Rue Saint-Rustique
+  - Rue Steinlen
+  - Rue Tesson
+  - "Rue V\xE9sale"
+  - Rue Vignon
+  - La J103
+  - "Le Secr\xE9tariat"
+  - Avenue Raguin
+  - Boulevard Sarfati

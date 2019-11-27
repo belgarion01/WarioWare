@@ -41,6 +41,20 @@ public class TilemapGenerator : MonoBehaviour
 
     private void Awake()
     {
+
+        switch (savedData.difficulty)
+        {
+            case ChooseDifficulty.Difficulty.Facile:
+                numberOfCommands = 4;
+                break;
+            case ChooseDifficulty.Difficulty.Moyen:
+                numberOfCommands = 5;
+                break;
+            case ChooseDifficulty.Difficulty.Difficile:
+                numberOfCommands = 6;
+                break;
+        }
+
         GenerateMap();
     }
 
@@ -80,7 +94,9 @@ public class TilemapGenerator : MonoBehaviour
         headDirection = Direction.Droite;
 
         //Set des Commandes aléatoire
-        if(randomCommands)commands = RandomCommands(numberOfCommands);
+        if (randomCommands)commands = RandomCommands(numberOfCommands);
+
+        Debug.Log(numberOfCommands);
 
         //Début du long chemin (plusieurs courts chemins)
         for (int i = 0; i < commands.Length; i++)
@@ -626,10 +642,13 @@ public class TilemapGenerator : MonoBehaviour
         savedData.tilesData = tilesData;
         savedData.numberOfCorrectPaths -= stepsToRemove - 1;
         savedData.commands = commands;
+
+        OnMapGenerated ?.Invoke();
         yield return null;
     }
 
     //Reset la tilemap
+    [Button]
     void ClearMap()
     {
         headPosition = Vector3Int.zero;
