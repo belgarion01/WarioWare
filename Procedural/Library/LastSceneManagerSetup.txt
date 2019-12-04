@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/Memento_2.unity
+- path: Assets/Scenes/ChooseDifficulty.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
